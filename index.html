@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Classifier</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        img {
+            max-width: 300px;
+            margin-top: 20px;
+        }
+
+        #result {
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Rifle vs Umbrella Detector</h1>
+
+    <input type="file" id="fileInput" accept="image/*">
+    <br><br>
+
+    <button onclick="uploadImage()">Predict</button>
+
+    <div>
+        <img id="preview" />
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+        // preview image before upload
+        document.getElementById("fileInput").onchange = function(event) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById("preview").src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        async function uploadImage() {
+            let fileInput = document.getElementById("fileInput");
+            let file = fileInput.files[0];
+
+            let formData = new FormData();
+            formData.append("image", file);
+
+            let response = await fetch("/predict", {
+                method: "POST",
+                body: formData
+            });
+
+            let data = await response.json();
+
+            document.getElementById("result").innerText =
+                "Prediction: " + data.prediction;
+        }
+    </script>
+
+</body>
+</html>

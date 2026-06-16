@@ -29,7 +29,7 @@ def predict():
 
     label = "Rifle" if prediction == 1 else "No Threat"
 
-    return jsonify({"prediction": label, "confidence": float(confidence)})
+    return jsonify({"prediction": label)})
 
     
     
